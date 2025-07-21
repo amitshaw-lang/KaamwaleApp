@@ -1,0 +1,8 @@
+streamlit
+pandas
+speechrecognition
+matplotlib
+requests
+openai
+pyttsx3
+googletrans==4.0.0-rc1
