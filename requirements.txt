@@ -5,4 +5,5 @@ matplotlib
 requests
 openai
 pyttsx3
+pydub
 googletrans==4.0.0-rc1
