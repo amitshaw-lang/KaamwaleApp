@@ -161,32 +161,34 @@ elif menu == "Booking Status":
             st.error("Job not found.")
 
 # ✅ Voice Assistant (Mock)
-elif menu == "Voice Job Post":
+elif menu == "Voice Job Posting":
     import speech_recognition as sr
-    st.subheader("🎤 Voice Job Posting")
+    import tempfile
 
-    st.info("Press the button below and speak your job requirement.")
+    st.header("🎙️ Voice Job Posting")
+    st.write("Upload your voice message (WAV or MP3) and we’ll convert it to text.")
 
-    if st.button("🎙️ Start Recording"):
+    # Upload audio file
+    audio_file = st.file_uploader("Upload your voice job description", type=["wav", "mp3"])
+
+    if audio_file is not None:
+        st.audio(audio_file, format='audio/wav')
+        with tempfile.NamedTemporaryFile(delete=False, suffix=".wav") as temp:
+            temp.write(audio_file.read())
+            temp_path = temp.name
+
         recognizer = sr.Recognizer()
-
-        with sr.Microphone() as source:
-            st.write("🎤 Listening... Speak now.")
-            audio_data = recognizer.listen(source, phrase_time_limit=5)
-            st.write("🧠 Processing...")
+        with sr.AudioFile(temp_path) as source:
+            audio = recognizer.record(source)
 
             try:
-                text = recognizer.recognize_google(audio_data)
-                st.success("✅ Voice recognized:")
-                st.write(f"📝 Job Description: `{text}`")
-
-                if st.button("📩 Post Job"):
-                    # Save to database or print (you can customize)
-                    st.success(f"Job posted: {text}")
+                text = recognizer.recognize_google(audio)
+                st.success("✅ Voice Converted to Text:")
+                st.write(text)
             except sr.UnknownValueError:
-                st.error("❌ Could not understand audio.")
+                st.error("❌ Could not understand the audio.")
             except sr.RequestError:
-                st.error("❌ Could not connect to speech service.")
+                st.error("❌ Could not connect to the voice service.")
     # ✅ KaamWale App.py — Part 2 (Phase 201–400 Internal Features)
 # Make sure Part 1 is already pasted above this code block.
 
