@@ -161,13 +161,14 @@ elif menu == "Booking Status":
             st.error("Job not found.")
 
 # ✅ Voice Assistant (Mock)
-elif menu == "Voice Job Posting":
+elif menu == "Voice Job Post":
     import speech_recognition as sr
     import tempfile
 
     st.header("🎙️ Voice Job Posting")
     st.write("Upload your voice message (WAV or MP3) and we’ll convert it to text.")
 
+    # Upload audio file
     audio_file = st.file_uploader("Upload your voice job description", type=["wav", "mp3"])
 
     if audio_file is not None:
