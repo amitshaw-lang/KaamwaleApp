@@ -162,23 +162,77 @@ elif menu == "Booking Status":
 
 # ✅ Voice Assistant (Mock)
 elif menu == "Voice Job Post":
+    import streamlit as st
     import speech_recognition as sr
     import tempfile
+    import base64
 
-    st.header("🎙️ Voice Job Posting")
-    st.write("Upload your voice message (WAV or MP3) and we’ll convert it to text.")
+    st.header("🎙️ Voice Job Posting with Recorder")
 
-    # Upload audio file
-    audio_file = st.file_uploader("Upload your voice job description", type=["wav", "mp3"])
+    # Voice recorder UI using HTML + JavaScript
+    st.markdown("""
+        <h5>Press the button below to start recording your job request:</h5>
+        <button onclick="startRecording()">Start Recording</button>
+        <button onclick="stopRecording()">Stop Recording</button>
+        <br><br>
+        <audio id="player" controls></audio>
+        <script>
+        let mediaRecorder;
+        let audioChunks = [];
 
-    if audio_file is not None:
-        st.audio(audio_file, format='audio/wav')
-        with tempfile.NamedTemporaryFile(delete=False, suffix=".wav") as temp:
-            temp.write(audio_file.read())
-            temp_path = temp.name
+        function startRecording() {
+            navigator.mediaDevices.getUserMedia({ audio: true }).then(stream => {
+                mediaRecorder = new MediaRecorder(stream);
+                mediaRecorder.start();
+
+                mediaRecorder.addEventListener("dataavailable", event => {
+                    audioChunks.push(event.data);
+                });
+
+                mediaRecorder.addEventListener("stop", () => {
+                    const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
+                    const reader = new FileReader();
+                    reader.readAsDataURL(audioBlob);
+                    reader.onloadend = () => {
+                        const base64Audio = reader.result.split(',')[1];
+                        const audioElement = document.getElementById('player');
+                        audioElement.src = reader.result;
+
+                        const input = document.createElement("input");
+                        input.type = "hidden";
+                        input.name = "audio_data";
+                        input.value = base64Audio;
+                        document.body.appendChild(input);
+                        document.forms[0].submit();
+                    };
+                });
+
+                setTimeout(() => {
+                    stopRecording();
+                }, 60000); // auto stop after 1 minute
+            });
+        }
+
+        function stopRecording() {
+            if (mediaRecorder) {
+                mediaRecorder.stop();
+            }
+        }
+        </script>
+    """, unsafe_allow_html=True)
+
+    # Process recorded audio (if sent)
+    audio_base64 = st.experimental_get_query_params().get("audio_data")
+    if audio_base64:
+        st.success("✅ Audio captured. Now converting to text...")
+
+        audio_data = base64.b64decode(audio_base64[0])
+        with tempfile.NamedTemporaryFile(delete=False, suffix=".wav") as temp_audio:
+            temp_audio.write(audio_data)
+            temp_audio_path = temp_audio.name
 
         recognizer = sr.Recognizer()
-        with sr.AudioFile(temp_path) as source:
+        with sr.AudioFile(temp_audio_path) as source:
             audio = recognizer.record(source)
 
             try:
