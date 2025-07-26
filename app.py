@@ -161,88 +161,53 @@ elif menu == "Booking Status":
             st.error("Job not found.")
 
 # ✅ Voice Assistant (Mock)
-elif menu == "Voice Job Post":
-    import streamlit as st
-    import speech_recognition as sr
-    import tempfile
-    import base64
+import streamlit as st
+import speech_recognition as sr
+import tempfile
+import os
+from pydub import AudioSegment
 
-    st.header("🎙️ Voice Job Posting with Recorder")
+st.set_page_config(page_title="KaamWale – Voice Job Post", layout="centered")
+st.title("🎙️ Voice Job Posting")
+st.subheader("KaamWale – Sab Kaam Ek App Se")
 
-    # Voice recorder UI using HTML + JavaScript
-    st.markdown("""
-        <h5>Press the button below to start recording your job request:</h5>
-        <button onclick="startRecording()">Start Recording</button>
-        <button onclick="stopRecording()">Stop Recording</button>
-        <br><br>
-        <audio id="player" controls></audio>
-        <script>
-        let mediaRecorder;
-        let audioChunks = [];
+st.markdown("""
+Upload your voice message (WAV or MP3) below ⬇️  
+We'll convert it to text and auto-send it to WhatsApp for job posting.
+""")
 
-        function startRecording() {
-            navigator.mediaDevices.getUserMedia({ audio: true }).then(stream => {
-                mediaRecorder = new MediaRecorder(stream);
-                mediaRecorder.start();
+uploaded_file = st.file_uploader("📤 Upload Voice File", type=["wav", "mp3"])
 
-                mediaRecorder.addEventListener("dataavailable", event => {
-                    audioChunks.push(event.data);
-                });
+if uploaded_file:
+    with tempfile.NamedTemporaryFile(delete=False, suffix=".wav") as temp_audio:
+        temp_audio.write(uploaded_file.read())
+        temp_audio_path = temp_audio.name
 
-                mediaRecorder.addEventListener("stop", () => {
-                    const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
-                    const reader = new FileReader();
-                    reader.readAsDataURL(audioBlob);
-                    reader.onloadend = () => {
-                        const base64Audio = reader.result.split(',')[1];
-                        const audioElement = document.getElementById('player');
-                        audioElement.src = reader.result;
+    # Convert mp3 to wav if needed
+    if uploaded_file.type == "audio/mpeg":
+        sound = AudioSegment.from_mp3(temp_audio_path)
+        temp_audio_path = temp_audio_path.replace(".mp3", "_converted.wav")
+        sound.export(temp_audio_path, format="wav")
 
-                        const input = document.createElement("input");
-                        input.type = "hidden";
-                        input.name = "audio_data";
-                        input.value = base64Audio;
-                        document.body.appendChild(input);
-                        document.forms[0].submit();
-                    };
-                });
+    st.audio(temp_audio_path, format="audio/wav")
 
-                setTimeout(() => {
-                    stopRecording();
-                }, 60000); // auto stop after 1 minute
-            });
-        }
+    recognizer = sr.Recognizer()
+    with sr.AudioFile(temp_audio_path) as source:
+        audio_data = recognizer.record(source)
+        try:
+            text = recognizer.recognize_google(audio_data, language='hi-IN')
+            st.success("📝 Voice Converted to Text:")
+            st.write(text)
 
-        function stopRecording() {
-            if (mediaRecorder) {
-                mediaRecorder.stop();
-            }
-        }
-        </script>
-    """, unsafe_allow_html=True)
+            whatsapp_link = f"https://wa.me/?text={text.replace(' ', '%20')}"
+            st.markdown(f"[💬 Send to WhatsApp]({whatsapp_link})", unsafe_allow_html=True)
 
-    # Process recorded audio (if sent)
-    audio_base64 = st.experimental_get_query_params().get("audio_data")
-    if audio_base64:
-        st.success("✅ Audio captured. Now converting to text...")
+        except sr.UnknownValueError:
+            st.error("❌ Could not understand the audio.")
+        except sr.RequestError:
+            st.error("❌ Could not connect to speech recognition service.")
 
-        audio_data = base64.b64decode(audio_base64[0])
-        with tempfile.NamedTemporaryFile(delete=False, suffix=".wav") as temp_audio:
-            temp_audio.write(audio_data)
-            temp_audio_path = temp_audio.name
-
-        recognizer = sr.Recognizer()
-        with sr.AudioFile(temp_audio_path) as source:
-            audio = recognizer.record(source)
-
-            try:
-                text = recognizer.recognize_google(audio)
-                st.success("✅ Voice Converted to Text:")
-                st.write(text)
-            except sr.UnknownValueError:
-                st.error("❌ Could not understand the audio.")
-            except sr.RequestError:
-                st.error("❌ Could not connect to the voice service.")
+    os.remove(temp_audio_path)
     # ✅ KaamWale App.py — Part 2 (Phase 201–400 Internal Features)
 # Make sure Part 1 is already pasted above this code block.
 
