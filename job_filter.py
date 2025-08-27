@@ -5,7 +5,7 @@ def load_job_data():
     return pd.read_csv('job_requests.csv')
 
 def main():
-    st.markdown("<h1 style='text-align: center; color: #4CAF50;'>KaamWale Job Filter System</h1>", unsafe_allow_html=True)
+    st.markdown("<h1 style='text-align: center; color: #4CAF50;'>RozgarWale Job Filter System</h1>", unsafe_allow_html=True)
     st.markdown("<hr>", unsafe_allow_html=True)
 
     df = load_job_data()

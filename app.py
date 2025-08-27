@@ -1,4 +1,7 @@
-# ✅ KaamWale app.py — Part 1 (Phase 1–200 Features Implemented)
+from voice_job_posting_page import show_voice_job_posting# ✅ RozgarWale app.py — Part 1 (Phase 1–200 Features Implemented)
+from ai_assistant_page import show_ai_assistant
+from ai_job_desc_page import show_ai_job_desc
+from ai_resume_page import show_ai_resume  # optional, if you created it
 import streamlit as st
 import pandas as pd
 import sqlite3
@@ -7,11 +10,11 @@ import random
 import json
 import os
 
-st.set_page_config(page_title="KaamWale App", layout="wide")
-st.title("🛠️ KaamWale – Sab Kaam Ek App Se")
+st.set_page_config(page_title="RozgarWale App", layout="wide")
+st.title("🛠️ RozgarWale – Sab Kaam Ek App Se")
 
 # ✅ Database Setup
-conn = sqlite3.connect("kaamwale.db", check_same_thread=False)
+conn = sqlite3.connect("RozgarWale.db", check_same_thread=False)
 c = conn.cursor()
 
 c.execute('''CREATE TABLE IF NOT EXISTS workers (
@@ -41,7 +44,7 @@ menu = st.sidebar.selectbox("Main Menu", [
     "Wallet", "Emergency Mode", "Heatmap", "Dispute System", "Subscription",
     "Resume Generator", "Corporate Module", "CRM", "Support Chat", "Voice Job Post",
     "Search", "Booking Status", "Calendar", "Live Chat", "Feedback", "GPS", "Skill Test",
-    "Availability"
+    "Availability","AI Assistant","AI Job Description","AI Resume",
 ])
 
 # ✅ Worker Profile Section
@@ -60,6 +63,17 @@ if menu == "Worker Profile":
                       (name, skill, location, phone, experience, aadhar.name if aadhar else ""))
             conn.commit()
             st.success("Worker profile added successfully!")
+            # Voice Job Post Section
+elif menu == "Voice Job Post":
+    show_voice_job_posting()   # ye function tumne voice_job_posting_page.py me banaya hai
+elif menu == "AI Assistant":
+    show_ai_assistant()
+
+elif menu == "AI Job Description":
+    show_ai_job_desc()
+
+elif menu == "AI Resume":
+    show_ai_resume()
 
 # ✅ Customer Signup Section
 elif menu == "Customer Signup":
@@ -160,55 +174,8 @@ elif menu == "Booking Status":
         else:
             st.error("Job not found.")
 
-# ✅ Voice Assistant (Mock)
-import streamlit as st
-import speech_recognition as sr
-import tempfile
-import os
-from pydub import AudioSegment
 
-st.set_page_config(page_title="KaamWale – Voice Job Post", layout="centered")
-st.title("🎙️ Voice Job Posting")
-st.subheader("KaamWale – Sab Kaam Ek App Se")
-
-st.markdown("""
-Upload your voice message (WAV or MP3) below ⬇️  
-We'll convert it to text and auto-send it to WhatsApp for job posting.
-""")
-
-uploaded_file = st.file_uploader("📤 Upload Voice File", type=["wav", "mp3"])
-
-if uploaded_file:
-    with tempfile.NamedTemporaryFile(delete=False, suffix=".wav") as temp_audio:
-        temp_audio.write(uploaded_file.read())
-        temp_audio_path = temp_audio.name
-
-    # Convert mp3 to wav if needed
-    if uploaded_file.type == "audio/mpeg":
-        sound = AudioSegment.from_mp3(temp_audio_path)
-        temp_audio_path = temp_audio_path.replace(".mp3", "_converted.wav")
-        sound.export(temp_audio_path, format="wav")
-
-    st.audio(temp_audio_path, format="audio/wav")
-
-    recognizer = sr.Recognizer()
-    with sr.AudioFile(temp_audio_path) as source:
-        audio_data = recognizer.record(source)
-        try:
-            text = recognizer.recognize_google(audio_data, language='hi-IN')
-            st.success("📝 Voice Converted to Text:")
-            st.write(text)
-
-            whatsapp_link = f"https://wa.me/?text={text.replace(' ', '%20')}"
-            st.markdown(f"[💬 Send to WhatsApp]({whatsapp_link})", unsafe_allow_html=True)
-
-        except sr.UnknownValueError:
-            st.error("❌ Could not understand the audio.")
-        except sr.RequestError:
-            st.error("❌ Could not connect to speech recognition service.")
-
-    os.remove(temp_audio_path)
-    # ✅ KaamWale App.py — Part 2 (Phase 201–400 Internal Features)
+    # ✅ RozgarWale App.py — Part 2 (Phase 201–400 Internal Features)
 # Make sure Part 1 is already pasted above this code block.
 
 # ✅ Referral Program
@@ -227,7 +194,7 @@ elif menu == "PDF Invoice":
 
 # ✅ Wallet
 elif menu == "Wallet":
-    st.header("💰 KaamWale Wallet")
+    st.header("💰 RozgarWale Wallet")
     worker_id = st.number_input("Enter Worker ID", step=1)
     if st.button("Check Wallet Balance"):
         c.execute("SELECT earnings FROM workers WHERE id=?", (worker_id,))
@@ -321,11 +288,7 @@ elif menu == "Skill Test":
     answer = st.text_area("Your Answer")
     if st.button("Submit Answer"):
         st.success("Answer submitted for evaluation! (Mock)")
-
-# ✅ WhatsApp Button (Mock)
-elif menu == "Voice Job Post":
-    st.header("📤 Voice Job Post with WhatsApp")
-    st.text("Feature Placeholder: Record voice and auto-send job description")
+        
 
 # ✅ PAN & GST Invoice Generator (Mock)
 elif menu == "PAN-GST Invoice":
@@ -335,12 +298,12 @@ elif menu == "PAN-GST Invoice":
     if st.button("Generate PAN-GST Invoice"):
         st.success("Invoice generated with PAN & GST (Mock)")
 
-# ✅ KaamWale Loyalty Credits
+# ✅ RozgarWale Loyalty Credits
 elif menu == "Wallet Credits":
-    st.header("🏅 KaamWale Loyalty Points")
+    st.header("🏅 RozgarWale Loyalty Points")
     user_id = st.text_input("Enter Your ID")
     if st.button("Check Points"):
-        st.success(f"You have {random.randint(50, 500)} KaamWale credits!")
+        st.success(f"You have {random.randint(50, 500)} RozgarWale credits!")
 
 # ✅ Job Filter System (Phase 397–400)
 elif menu == "Job Filter":
@@ -354,7 +317,7 @@ elif menu == "Job Filter":
             c.execute("SELECT * FROM jobs WHERE location LIKE ? AND job_description LIKE ?", (f"%{location}%", f"%{skill}%"))
         rows = c.fetchall()
         st.dataframe(pd.DataFrame(rows, columns=["ID", "Customer", "Desc", "Location", "Status", "Worker", "Price", "Time"]))
-        # ✅ KaamWale App — Part 3 (Final Features: Phase 401–600)
+        # ✅ RozgarWale App — Part 3 (Final Features: Phase 401–600)
 
 # ✅ ETA Countdown System
 elif menu == "Booking Status":

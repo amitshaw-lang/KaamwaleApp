@@ -1,6 +1,6 @@
 import sqlite3
 
-conn = sqlite3.connect("kaamwale.db")
+conn = sqlite3.connect("RozgarWale.db")
 c = conn.cursor()
 
 # ❌ Ye pura table delete karega (agar already bana hai)

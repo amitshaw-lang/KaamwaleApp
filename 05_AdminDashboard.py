@@ -2,7 +2,7 @@ import streamlit as st
 import pandas as pd
 import os
 
-st.title("🛠️ Admin Dashboard - KaamWale")
+st.title("🛠️ Admin Dashboard - RozgarWale")
 
 st.subheader("📋 Registered Workers List")
 csv_file = "worker_data.csv"

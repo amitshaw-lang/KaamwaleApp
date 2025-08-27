@@ -3,7 +3,7 @@ import pandas as pd
 import os
 
 # Page title
-st.title("Customer Signup – KaamWale")
+st.title("Customer Signup – RozgarWale")
 st.subheader("Apna account banaye aur workers dhoondhein!")
 
 # Inputs

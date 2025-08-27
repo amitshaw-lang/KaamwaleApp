@@ -1,6 +1,6 @@
-# KaamWaleApp
+# RozgarWaleApp
 
-**KaamWale – Sab Kaam Ek App Se**  
+**RozgarWale – Sab Kaam Ek App Se**  
 This is a labor hiring platform where customers can post jobs, and workers can register and get hired.
 
 ## 💻 Features

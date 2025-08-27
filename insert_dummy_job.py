@@ -1,7 +1,7 @@
 import sqlite3
 from datetime import datetime
 
-conn = sqlite3.connect("kaamwale.db")
+conn = sqlite3.connect("RozgarWale.db")
 c = conn.cursor()
 
 c.execute("INSERT INTO jobs (customer, description, location, status, worker, price, timestamp) VALUES (?, ?, ?, ?, ?, ?, ?)", 

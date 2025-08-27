@@ -3,7 +3,7 @@ import streamlit as st
 st.title("🔒 Privacy Policy")
 
 st.markdown("""
-Welcome to **KaamWale App** Privacy Policy page.
+Welcome to **RozgarWale App** Privacy Policy page.
 
 ✅ **Your Privacy Matters**
 - We respect your privacy and ensure that your data is safe.
@@ -22,5 +22,5 @@ Welcome to **KaamWale App** Privacy Policy page.
 - We comply with local data protection laws to keep your data safe.
 
 📧 **For any concerns or data requests, contact us:**  
-[ support@kaamwaleapp.com ]
+[ support@RozgarWaleapp.com ]
 """)

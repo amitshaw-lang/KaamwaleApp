@@ -206,3 +206,8 @@ marimo/_static/
 marimo/_lsp/
 __marimo__/
 firebase_key.json
+# Secrets & local databases
+.streamlit/
+*.db
+RozgarWale.db
+kaamwale.db
