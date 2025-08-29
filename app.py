@@ -75,7 +75,7 @@ elif menu == "AI Job Description":
 elif menu == "AI Resume":
     show_ai_resume()
 
-  elif menu == "Audio Test":
+elif menu == "Audio Test":
     import test_audio  # file: test_audio.py
     test_audio.app()
 
