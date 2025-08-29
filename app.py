@@ -42,7 +42,7 @@ menu = st.sidebar.selectbox("Main Menu", [
     "Worker Profile", "Customer Signup", "Job Post", "CSV Manager", "AI Assistant",
     "Notifications", "Bookings", "Review System", "Referral Program", "PDF Invoice",
     "Wallet", "Emergency Mode", "Heatmap", "Dispute System", "Subscription",
-    "Resume Generator", "Corporate Module", "CRM", "Support Chat", "Voice Job Post",
+    "Resume Generator", "Corporate Module", "CRM", "Support Chat", "Voice Job Post","Audio Test"
     "Search", "Booking Status", "Calendar", "Live Chat", "Feedback", "GPS", "Skill Test",
     "Availability","AI Assistant","AI Job Description","AI Resume",
 ])
@@ -74,6 +74,10 @@ elif menu == "AI Job Description":
 
 elif menu == "AI Resume":
     show_ai_resume()
+
+  elif menu == "Audio Test":
+    import test_audio  # file: test_audio.py
+    test_audio.app()
 
 # ✅ Customer Signup Section
 elif menu == "Customer Signup":
