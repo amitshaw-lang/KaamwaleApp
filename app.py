@@ -42,10 +42,11 @@ menu = st.sidebar.selectbox("Main Menu", [
     "Worker Profile", "Customer Signup", "Job Post", "CSV Manager", "AI Assistant",
     "Notifications", "Bookings", "Review System", "Referral Program", "PDF Invoice",
     "Wallet", "Emergency Mode", "Heatmap", "Dispute System", "Subscription",
-    "Resume Generator", "Corporate Module", "CRM", "Support Chat", "Voice Job Post","Audio Test"
+    "Resume Generator", "Corporate Module", "CRM", "Support Chat", "Voice Job Post","Audio Test",
     "Search", "Booking Status", "Calendar", "Live Chat", "Feedback", "GPS", "Skill Test",
     "Availability","AI Assistant","AI Job Description","AI Resume",
 ])
+st.write("DEBUG menu ->", repr(menu))
 
 # ✅ Worker Profile Section
 if menu == "Worker Profile":
@@ -86,6 +87,11 @@ elif menu == "Customer Signup":
     phone = st.text_input("Phone Number")
     if st.button("Signup"):
         st.success(f"Customer {name} signed up successfully! (Demo)")
+
+elif menu.strip().lower() == "audio test":
+    st.success("Reached Audio Test branch")  # debug confirm
+    import test_audio
+    test_audio.app()
 
 # ✅ Job Post Section
 elif menu == "Job Post":

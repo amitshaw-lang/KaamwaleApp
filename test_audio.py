@@ -3,15 +3,14 @@ from pydub import AudioSegment
 
 def app():
     st.title("🎤 FFmpeg Test – Audio Conversion")
+    st.write("✅ Audio Test page loaded!")   # Debug line
 
-    # Upload audio file
     uploaded_file = st.file_uploader(
         "Upload a WAV file to convert into MP3",
         type=["wav"]
     )
 
     if uploaded_file is not None:
-        # Save uploaded file temporarily
         with open("temp.wav", "wb") as f:
             f.write(uploaded_file.getbuffer())
 
@@ -21,6 +20,10 @@ def app():
 
         st.success("✅ Conversion done! Saved as output.mp3")
 
-        # Download button (optional but handy)
+        # Download button
         with open("output.mp3", "rb") as f:
             st.download_button("Download MP3", f, file_name="output.mp3", mime="audio/mpeg")
+
+# Local test ke liye (optional)
+if __name__ == "__main__":
+    app()
