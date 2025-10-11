@@ -211,3 +211,5 @@ firebase_key.json
 *.db
 RozgarWale.db
 kaamwale.db
+.env
+*.env
