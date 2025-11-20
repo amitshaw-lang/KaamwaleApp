@@ -1,1 +1,1 @@
-ffmpeg
+# Reserved for future desktop-only dependencies. (APK build requires none.)

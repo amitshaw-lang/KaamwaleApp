@@ -35,18 +35,21 @@ if st.button("Check Points"):
     st.header("👷 Worker Profile")
     with st.form("worker_form"):
         name = st.text_input("Name")
-        skill = st.selectbox("Skill", ["Plumber", "Electrician", "Carpenter", "Mechanic"])
+        skill = st.selectbox(
+            "Skill", ["Plumber", "Electrician", "Carpenter", "Mechanic"]
+        )
         location = st.text_input("Location")
         phone = st.text_input("Phone")
         experience = st.text_input("Experience")
         aadhar = st.file_uploader("Upload Aadhaar")
+        aadhar = None
         submit = st.form_submit_button("Submit")
     if submit:
         # --- 1) inputs clean/normalize ---
-        nm  = (name or "").strip()
-        sk  = (skill or "").strip()
+        nm = (name or "").strip()
+        sk = (skill or "").strip()
         loc = (location or "").strip()
-        ph  = (phone or "").strip().replace(" ", "").replace("-", "")
+        ph = (phone or "").strip().replace(" ", "").replace("-", "")
         exp = (experience or "").strip()
         # --- 2) inputs validate ---
         if not nm:
